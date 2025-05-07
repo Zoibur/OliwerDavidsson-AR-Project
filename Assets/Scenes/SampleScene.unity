@@ -550,6 +550,7 @@ GameObject:
   - component: {fileID: 691898007}
   - component: {fileID: 691898006}
   - component: {fileID: 691898005}
+  - component: {fileID: 691898010}
   m_Layer: 0
   m_Name: XR Origin (Mobile AR)
   m_TagString: Untagged
@@ -637,6 +638,19 @@ Transform:
   - {fileID: 1180719120}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &691898010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691898004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5301d291f5d080a4aac5cb79fea7b421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refToPrefab: {fileID: 4763521186292625662, guid: a374524e1b2d4604b9c2eaed5bca89dd, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

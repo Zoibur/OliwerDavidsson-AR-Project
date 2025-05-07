@@ -3333,6 +3333,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "ARMobil",
+            "id": "aff91107-23c5-4b92-a574-5d7882eefe9b",
+            "actions": [
+                {
+                    "name": "Touch",
+                    "type": "Value",
+                    "id": "19c7c1fb-dde3-4f58-903a-35c78b48fe29",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6b8bcc98-1b1e-4505-88e5-f59c4935aeda",
+                    "path": "<Touchscreen>/primaryTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
