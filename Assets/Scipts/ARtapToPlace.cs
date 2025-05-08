@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -17,7 +18,7 @@ public class ARTapToPlace : MonoBehaviour
 
     private CustomInputActions customInputAction;   
     
-    private List<ARRaycastHit> raycasthits;
+    private List<ARRaycastHit> raycasthits = new();
 
     private void Awake()
     {
@@ -58,31 +59,36 @@ public class ARTapToPlace : MonoBehaviour
     /// <param name="obj"></param>
     private void Touch_started(InputAction.CallbackContext context)
     {
-        // Här gör vi någonting som sker när vi tryckte på skärmen...
-
-        // Exempelvis skriv ut meddelande
-        DebugManager.Instance.AddDebugMessage("Touch Screen!");
-        
-        DebugManager.Instance.AddDebugMessage("Postion " + context.ReadValue<Vector2>());
-        
-        Vector2 screenPoint = context.ReadValue<Vector2>();
-
-        if (raycastManager.Raycast(screenPoint, raycasthits, TrackableType.Planes))
+        try
         {
-            DebugManager.Instance.AddDebugMessage("Hit");
-            
-            Pose hitpose = raycasthits[0].pose;
-            
-            GameObject refToGameObject = Instantiate(refToPrefab, hitpose.position, hitpose.rotation);
-           
-           refToGameObject.name = "Ref To Object";
-           refToGameObject.SetActive(true);
-           refToGameObject.AddComponent<ARAnchor>();
-            
+            // Här gör vi någonting som sker när vi tryckte på skärmen...
+
+            // Exempelvis skriv ut meddelande
+            DebugManager.Instance.AddDebugMessage("Try Touch Screen!");
+
+            //DebugManager.Instance.AddDebugMessage("Postion " + context.ReadValue<Vector2>());
+
+            Vector2 screenPoint = context.ReadValue<Vector2>();
+
+            if (raycastManager.Raycast(screenPoint, raycasthits, TrackableType.Planes))
+            {
+                DebugManager.Instance.AddDebugMessage("Hit");
+
+                Pose hitpose = raycasthits[0].pose;
+
+                GameObject refToGameObject = Instantiate(refToPrefab, hitpose.position, hitpose.rotation);
+
+                refToGameObject.name = "Ref To Object";
+                refToGameObject.SetActive(true);
+                refToGameObject.AddComponent<ARAnchor>();
+
+            }
         }
-        else
+        catch (Exception err)
         {
-            DebugManager.Instance.AddDebugMessage("No Hit");
+            DebugManager.Instance.AddDebugMessage("Failed to Touch Screen! " + err.Message);
         }
+       
+       
     }
 }
