@@ -3439,7 +3439,7 @@ public partial class @CustomInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""6b8bcc98-1b1e-4505-88e5-f59c4935aeda"",
                     ""path"": ""<Touchscreen>/primaryTouch"",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Touch"",

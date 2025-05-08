@@ -14,7 +14,7 @@ namespace AugmentedRealityCourse
             {
                 if (_instance == null)
                 {
-                    _instance = GameObject.FindObjectOfType<T>();
+                    _instance = GameObject.FindAnyObjectByType<T>();
 
                     if (_instance == null)
                     {
