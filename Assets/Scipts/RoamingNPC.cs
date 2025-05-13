@@ -22,14 +22,13 @@ public class RoamingNPC : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-        {
+        
             if (timer >= waitTime)
             {
                 MoveToNewDestination();
                 timer = 0f;
             }
-        }
+        
     }
 
     void MoveToNewDestination()
