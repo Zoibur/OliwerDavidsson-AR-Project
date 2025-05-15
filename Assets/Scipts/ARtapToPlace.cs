@@ -46,10 +46,12 @@ public class ARTapToPlace : MonoBehaviour
         
               customInputAction.ARMobil.Touch.started += Touch_started; // Här lyssnar vi på händelsen touch screen
               customInputAction.ARMobil.Touch.Enable();  // Här aktiverar avlyssningen av den händelsen  
+              
     }
 
     private void OnDisable()
     {
+        
         customInputAction.ARMobil.Touch.Disable();
         customInputAction.ARMobil.Touch.started -= Touch_started;
     }
@@ -59,35 +61,40 @@ public class ARTapToPlace : MonoBehaviour
     /// <param name="obj"></param>
     private void Touch_started(InputAction.CallbackContext context)
     {
-        try
-        {
-            // Här gör vi någonting som sker när vi tryckte på skärmen...
-
-            // Exempelvis skriv ut meddelande
-            DebugManager.Instance.AddDebugMessage("Try Touch Screen!");
-
-            //DebugManager.Instance.AddDebugMessage("Postion " + context.ReadValue<Vector2>());
-
-            Vector2 screenPoint = context.ReadValue<Vector2>();
-
-            if (raycastManager.Raycast(screenPoint, raycasthits, TrackableType.Planes))
-            {
-                DebugManager.Instance.AddDebugMessage("Hit");
-
-                Pose hitpose = raycasthits[0].pose;
-
-                GameObject refToGameObject = Instantiate(refToPrefab, hitpose.position, hitpose.rotation);
-
-                refToGameObject.name = "Ref To Object";
-                refToGameObject.SetActive(true);
-                refToGameObject.AddComponent<ARAnchor>();
-
-            }
-        }
-        catch (Exception err)
-        {
-            DebugManager.Instance.AddDebugMessage("Failed to Touch Screen! " + err.Message);
-        }
+       
+           try
+                  {
+                      // Här gör vi någonting som sker när vi tryckte på skärmen...
+          
+                      // Exempelvis skriv ut meddelande
+                      DebugManager.Instance.AddDebugMessage("Try Touch Screen!");
+          
+                      //DebugManager.Instance.AddDebugMessage("Postion " + context.ReadValue<Vector2>());
+          
+                      Vector2 screenPoint = context.ReadValue<Vector2>();
+          
+                      if (raycastManager.Raycast(screenPoint, raycasthits, TrackableType.Planes))
+                      {
+                          DebugManager.Instance.AddDebugMessage("Hit");
+          
+                          Pose hitpose = raycasthits[0].pose;
+          
+                          GameObject refToGameObject = Instantiate(refToPrefab, hitpose.position, hitpose.rotation);
+          
+                          refToGameObject.name = "Ref To Object";
+                          refToGameObject.SetActive(true);
+                          refToGameObject.AddComponent<ARAnchor>();
+          
+                      }
+                      
+                      
+                  }
+                  catch (Exception err)
+                  {
+                      DebugManager.Instance.AddDebugMessage("Failed to Touch Screen! " + err.Message);
+                  }  
+        
+       
        
        
     }
