@@ -1,16 +1,5 @@
 {
   "dependencies": {
-    "com.cesium.unity": {
-      "version": "file:C:/Users/olda2401/Downloads/com.cesium.unity-1.16.0.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {
-        "com.unity.mathematics": "1.2.0",
-        "com.unity.test-framework": "1.1.31",
-        "com.unity.shadergraph": "12.1.6",
-        "com.unity.inputsystem": "1.4.2"
-      }
-    },
     "com.google.ar.core.arfoundation.extensions": {
       "version": "https://github.com/google-ar/arcore-unity-extensions.git",
       "depth": 0,
