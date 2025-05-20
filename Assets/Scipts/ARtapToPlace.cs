@@ -9,16 +9,19 @@ using AugmentedRealityCourse;
 
 public class ARTapToPlace : MonoBehaviour
 {
-   [SerializeField]
-    private GameObject refToPrefab;             
-
+   [SerializeField] private GameObject refToPrefab; 
+   
+   
     private ARRaycastManager raycastManager;    
 
     private ARPlaneManager planeManager;        
+    
+    
 
     private CustomInputActions customInputAction;   
     
     private List<ARRaycastHit> raycasthits = new();
+   
 
     private void Awake()
     {
@@ -37,9 +40,7 @@ public class ARTapToPlace : MonoBehaviour
         
         
     }
-    
-   
-    
+  
 
     private void OnEnable()
     {
@@ -84,7 +85,8 @@ public class ARTapToPlace : MonoBehaviour
                           refToGameObject.name = "Ref To Object";
                           refToGameObject.SetActive(true);
                           refToGameObject.AddComponent<ARAnchor>();
-          
+                          
+
                       }
                       
                       
