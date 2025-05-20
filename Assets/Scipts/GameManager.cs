@@ -1,13 +1,24 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Swing swing;
     [SerializeField] private RoamingNPC player;
     [SerializeField] private Transform seat;
-    
+    [SerializeField] private Animator npcAnimator;
+    [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private Transform faceForwardTransform;
+
+    private void Update()
+    {
+        bool isMoving = agent.velocity.magnitude > 0.01f;
+        
+        npcAnimator.SetBool("Move", isMoving);
+    }
+
     public void StartSwinging()
     {
         if (player.state == RoamingNPC.State.Swinging) return;
@@ -16,13 +27,16 @@ public class GameManager : MonoBehaviour
         StartCoroutine(WaitForAgentToReachDestination(() =>
         {
             var startPosition = player.transform.position;
+            FaceDirection(faceForwardTransform.position);
+            npcAnimator.SetTrigger("Sit");
             swing.StartSwing();
             player.transform.SetParent(swing.swingSeat);
             player.transform.localPosition = Vector3.zero;
             player.active = false;
             player.agent.enabled = false;
-            StartCoroutine(ResetState(5.0f, () =>
+            StartCoroutine(ResetState(6.0f, () =>
             {
+                npcAnimator.SetTrigger("Idle");
                 player.agent.enabled = true;
                 player.active = true;
                 swing.StopSwing();
@@ -41,9 +55,21 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitForAgentToReachDestination(Action onComplete)
     {
-        Debug.LogError($"remaining distance {player.agent.remainingDistance}");
-        Debug.LogError($"remaining distance {player.agent.stoppingDistance}");
-        yield return new WaitUntil(() => player.agent.remainingDistance <= player.agent.stoppingDistance);
+        while (player.agent.pathPending || player.agent.remainingDistance > player.agent.stoppingDistance)
+        {
+            
+            yield return null;
+        }
         onComplete?.Invoke();
+    }
+    private void FaceDirection(Vector3 targetPosition)
+    {
+        Vector3 direction = (targetPosition - player.transform.position).normalized;
+        direction.y = 0; // Ignore vertical rotation
+
+        if (direction != Vector3.zero)
+        {
+            player.transform.rotation = Quaternion.LookRotation(direction);
+        }
     }
 }

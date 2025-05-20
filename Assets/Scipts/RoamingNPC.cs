@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class RoamingNPC : MonoBehaviour
 {
@@ -10,54 +13,100 @@ public class RoamingNPC : MonoBehaviour
         Eating,
         Sleeping,
     }
-    [SerializeField] private Animator animator;
     public State state = State.Idle;
     public float roamRadius = 1.5f;
+    public float waitTimer = 0f;
     public float waitTime = 2f;
-    public float agentSpeed = 0.5f; // Adjustable speed
+    private bool isWaiting = false;
     public bool active;
+    [SerializeField]Animator animator;
+    
+    private bool isDoingAction;
+    [SerializeField]private Transform actionTarget;
+    
+    [SerializeField] private RoamingNPC player;
 
     public NavMeshAgent agent;
     private float timer;
 
     void Start()
     {
-        agent.speed = agentSpeed;
-        timer = waitTime;
+
         MoveToNewDestination();
     }
 
     void Update()
     {
-        if (!active){return;}
-        timer += Time.deltaTime;
-     
-        
-            if (timer >= waitTime)
-            {
-                MoveToNewDestination();
-                timer = 0f;
-                
-            }
-        
-    }
+        if (!active)
+        {
+            return;
+        }
 
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (isDoingAction)
+            {
+                StartCoroutine(PerformAction());
+                isDoingAction = false; // Prevent repeating
+                animator.SetTrigger("Squat");
+                return;
+            }
+            if (!isWaiting)
+            {
+                isWaiting = true;
+                waitTimer = waitTime;
+            }
+
+            // Wait at destination before moving again
+            waitTimer -= Time.deltaTime;
+            if (waitTimer <= 0f)
+            {
+                isWaiting = false;
+                MoveToNewDestination();
+            }
+
+        }
+
+       
+    }
     void MoveToNewDestination()
     {
-        
-        Vector3 newPos = RandomNavSphere(transform.position, roamRadius, -1);
-        agent.SetDestination(newPos);
-        animator.SetTrigger("Walking");
-    }
 
-    public static Vector3 RandomNavSphere(Vector3 origin, float distance, int layermask)
+        Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
+        randomDirection += transform.position;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+
+    }
+    public void WalkToTargetAndAct(Transform target)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * distance;
-        randomDirection += origin;
+        isDoingAction = true;
+        actionTarget = target;
+        
 
-        NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, distance, layermask);
-
-        return navHit.position;
+        agent.SetDestination(actionTarget.position);
     }
+    private IEnumerator PerformAction()
+    {
+        if (actionTarget != null)
+        {
+            Vector3 lookDir = (actionTarget.position - transform.position).normalized;
+            lookDir.y = 0;
+            transform.rotation = Quaternion.LookRotation(lookDir);
+        }
+        player.active = false;
+        player.agent.enabled = false;
+        
+
+        yield return new WaitForSeconds(8);
+        player.agent.enabled = true;
+        player.active = true;
+        MoveToNewDestination();
+    }
+
+    
 }
