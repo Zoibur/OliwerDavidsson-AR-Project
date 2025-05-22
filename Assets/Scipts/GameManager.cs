@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator npcAnimator;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform faceForwardTransform;
+    [SerializeField] private Cooldown cooldown;
 
     private void Update()
     {
@@ -28,20 +29,22 @@ public class GameManager : MonoBehaviour
         {
             var startPosition = player.transform.position;
             FaceDirection(faceForwardTransform.position);
-            npcAnimator.SetTrigger("Sit");
+            npcAnimator.SetBool("Sit", true);
             swing.StartSwing();
             player.transform.SetParent(swing.swingSeat);
             player.transform.localPosition = Vector3.zero;
             player.active = false;
             player.agent.enabled = false;
+            cooldown.InactiveButton();
             StartCoroutine(ResetState(6.0f, () =>
             {
-                npcAnimator.SetTrigger("Idle");
+                npcAnimator.SetBool("Sit", false);
                 player.agent.enabled = true;
                 player.active = true;
                 swing.StopSwing();
                 player.transform.SetParent(null);
                 player.transform.position = startPosition;
+                cooldown.ActiveButton();
             }));
         }));
     }
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
         onComplete?.Invoke();
     }
 
-    private IEnumerator WaitForAgentToReachDestination(Action onComplete)
+    public IEnumerator WaitForAgentToReachDestination(Action onComplete)
     {
         while (player.agent.pathPending || player.agent.remainingDistance > player.agent.stoppingDistance)
         {
