@@ -1,4 +1,5 @@
 using System;
+using AugmentedRealityCourse;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.ARFoundation;
@@ -15,34 +16,45 @@ public class ARSomething : MonoBehaviour
         _camera = GetComponent<Camera>();
         
         _customInputActions = new CustomInputActions();
+        _customInputActions.Enable();
         
     } 
     private void OnEnable()
     {
-        _customInputActions.ARMobil.Touch.started += TapStartPostion_statred; // Här lyssnar vi på händelsen touch screen
-        _customInputActions.ARMobil.Touch.Enable();
+        _customInputActions.TouchscreenGestures.TapStartPosition.started += TapStartPostion_statred; // Här lyssnar vi på händelsen touch screen
+        _customInputActions.TouchscreenGestures.TapStartPosition.Enable();
     }
 
     private void OnDisable()
     {
-        _customInputActions.ARMobil.Touch.Disable();
-        _customInputActions.ARMobil.Touch.started -= TapStartPostion_statred;
+        _customInputActions.TouchscreenGestures.TapStartPosition.Disable();
+        _customInputActions.TouchscreenGestures.TapStartPosition.started -= TapStartPostion_statred;
     }
 
     private void TapStartPostion_statred(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Vector3 pos = context.ReadValue<Vector3>();
         
-        Ray ray = _camera.ScreenPointToRay(pos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit,10))
-        {
-            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            DebugManager.Instance.AddDebugMessage("Try Touch Screen! to rotate");
 
-            if (interactable !=null)
+            Vector3 pos = context.ReadValue<Vector3>();
+
+            Ray ray = _camera.ScreenPointToRay(pos);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 10))
             {
-                interactable.Interact();
+                
+                DebugManager.Instance.AddDebugMessage("Hit");
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+                if (interactable != null)
+                {
+                    DebugManager.Instance.AddDebugMessage("Interactable");
+                    interactable.Interact();
+                }
             }
-        }
+
+        
+        
     }
 }

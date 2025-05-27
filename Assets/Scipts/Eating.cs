@@ -9,6 +9,7 @@ public class Eating : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject eatingPrefab;
     [SerializeField] private Cooldown cooldown;
+    [SerializeField] private Transform targetFood;
 
     public void StartEating()
     {
@@ -17,7 +18,7 @@ public class Eating : MonoBehaviour
         StartCoroutine(gameManager.WaitForAgentToReachDestination(() =>
         {
             var startPosition = player.transform.position;
-            GameObject food = Instantiate(eatingPrefab, target.position, Quaternion.identity);
+            GameObject food = Instantiate(eatingPrefab, targetFood.position, Quaternion.identity);
             animator.SetBool("Food", true);
             player.active = false;
             player.agent.enabled = false;

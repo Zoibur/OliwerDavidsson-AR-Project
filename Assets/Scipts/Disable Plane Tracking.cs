@@ -18,21 +18,7 @@ public class DisablePlaneTracking : MonoBehaviour
             return;
         }
     }
-
-    private void OnEnable()
-    {
-        arPlaneManager.planesChanged += PlaneManager_planesChanged;
-    }
-
-    private void OnDisable()
-    {
-        arPlaneManager.planesChanged -= PlaneManager_planesChanged;
-    }
-
-    private void PlaneManager_planesChanged(ARPlanesChangedEventArgs context)
-    {
-        
-    }
+    
     public void SetPlaneTracking(bool isActivated)
     {
         arPlaneManager.enabled = isActivated;
