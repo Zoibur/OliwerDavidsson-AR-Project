@@ -70,7 +70,7 @@ public class ARTapToPlace : MonoBehaviour
                 // Här gör vi någonting som sker när vi tryckte på skärmen...
     
                 // Exempelvis skriv ut meddelande
-                DebugManager.Instance.AddDebugMessage("Try Touch Screen!");
+                
     
                 //DebugManager.Instance.AddDebugMessage("Postion " + context.ReadValue<Vector2>());
     
@@ -78,7 +78,7 @@ public class ARTapToPlace : MonoBehaviour
     
                 if (raycastManager.Raycast(screenPoint, raycasthits, TrackableType.Planes))
                 {
-                    DebugManager.Instance.AddDebugMessage("Hit");
+                    
     
                     Pose hitpose = raycasthits[0].pose;
     
